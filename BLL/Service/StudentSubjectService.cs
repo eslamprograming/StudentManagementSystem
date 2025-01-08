@@ -37,9 +37,9 @@ namespace BLL.Service
             return result;
         }
 
-        public async Task<Response<Student>> UpdateSujectsToStudentAsync(int Student_Id, List<int> subjects)
+        public async Task<Response<Student>> UpdateSujectsToStudentAsync(int Student_Id, int OldsubjectsId, int newsubject_Id)
         {
-            var result = await _studentSujectService.UpdateSujectsToStudentAsync(Student_Id, subjects);
+            var result = await _studentSujectService.UpdateSujectsToStudentAsync(Student_Id, OldsubjectsId,newsubject_Id);
             return result;
         }
     }

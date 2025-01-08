@@ -9,7 +9,6 @@ namespace DAL.Entities
 {
     public class Student
     {
-        [Key]
         public int StudentId { get; set; }
 
         [Required]
@@ -17,18 +16,21 @@ namespace DAL.Entities
         public string Name { get; set; }
 
         [Required]
+        [Range(1, 120, ErrorMessage = "Age must be between 1 and 120.")]
         public int Age { get; set; }
-        [Required]
 
+        [Required]
+        [MaxLength(200)]
         public string Address { get; set; }
-        [Required]
 
+        [Required]
+        [Phone(ErrorMessage = "Invalid phone number.")]
         public string Phone { get; set; }
-        [Required]
 
+        [Required]
+        [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string email { get; set; }
 
-        public ICollection<Subject>? Subjects { get; set; }
-
+        public ICollection<StudentSubject> StudentSubjects { get; set; } = new List<StudentSubject>();
     }
 }

@@ -25,7 +25,8 @@ namespace DAL.Repo
             using var transaction = await db.Database.BeginTransactionAsync();
             try
             {
-                var student = await db.Students.Include(s => s.Subjects).FirstOrDefaultAsync(s => s.StudentId == Student_Id);
+                var student = await db.Students.Include(s => s.StudentSubjects).
+                    ThenInclude(n=>n.subjects).FirstOrDefaultAsync(s => s.StudentId == Student_Id);
                 if (student == null)
                 {
                     return new Response<Student>()
@@ -39,9 +40,12 @@ namespace DAL.Repo
                 var subjects = await db.Subjects.Where(s => subjectsId.Contains(s.SubjectId)).ToListAsync();
                 foreach (var subject in subjects)
                 {
-                    if (!student.Subjects.Contains(subject)) // Avoid duplicate additions
+                    if (!student.StudentSubjects.Select(n=>n.subjects).Contains(subject)) // Avoid duplicate additions
                     {
-                        student.Subjects.Add(subject);
+                        StudentSubject studentSubject = new StudentSubject();
+                        studentSubject.subjects = subject;
+                        studentSubject.StudentId=student.StudentId;
+                        db.StudentSubjects.AddAsync(studentSubject);
                     }
                 }
 
@@ -71,11 +75,10 @@ namespace DAL.Repo
         {
             try
             {
-                var student = await db.Students
-                    .Include(s => s.Subjects)
-                    .FirstOrDefaultAsync(s => s.StudentId == Student_Id);
+                var studentSubject = await db.StudentSubjects.
+                    Where(n => n.SubjectId == subjectId && n.StudentId == Student_Id).FirstOrDefaultAsync();
 
-                if (student == null)
+                if (studentSubject == null)
                 {
                     return new Response<Student>()
                     {
@@ -85,29 +88,7 @@ namespace DAL.Repo
                     };
                 }
 
-                var subject = await db.Subjects.FindAsync(subjectId);
-
-                if (subject == null)
-                {
-                    return new Response<Student>()
-                    {
-                        success = false,
-                        statuscode = "400",
-                        message = "Subject not exist"
-                    };
-                }
-
-                if (!student.Subjects.Contains(subject))
-                {
-                    return new Response<Student>()
-                    {
-                        success = false,
-                        statuscode = "400",
-                        message = "Subject is not associated with the student"
-                    };
-                }
-
-                student.Subjects.Remove(subject);
+                db.StudentSubjects.Remove(studentSubject);
                 await db.SaveChangesAsync();
 
                 return new Response<Student>()
@@ -132,9 +113,9 @@ namespace DAL.Repo
         {
             try
             {
-                var subjects = await db.Students
+                var subjects = await db.StudentSubjects
                                         .Where(s => s.StudentId == studentId)
-                                        .SelectMany(s => s.Subjects)
+                                        .Include(n=>n.subjects).Select(n=>n.subjects)
                                         .ToListAsync();
 
                 if (!subjects.Any())
@@ -164,58 +145,27 @@ namespace DAL.Repo
                 };
             }
         }
-        public async Task<Response<Student>> UpdateSujectsToStudentAsync(int Student_Id, List<int> subjectsId)
+        public async Task<Response<Student>> UpdateSujectsToStudentAsync(int Student_Id, int OldsubjectsId,int newsubject_Id)
         {
             try
             {
-                // تحميل الطالب مع المواد المرتبطة
-                var student = await db.Students
-                    .Include(s => s.Subjects)
-                    .FirstOrDefaultAsync(s => s.StudentId == Student_Id);
-
-                if (student == null)
-                {
-                    return new Response<Student>()
-                    {
-                        success = false,
-                        statuscode = "400",
-                        message = "Student not exist"
-                    };
-                }
-
-                // جلب المواد بناءً على قائمة المعرفات
-                var subjects = await db.Subjects
-                    .Where(s => subjectsId.Contains(s.SubjectId))
-                    .ToListAsync();
-
-                // التحقق من وجود جميع المواد
-                if (subjects.Count != subjectsId.Count)
-                {
-                    return new Response<Student>()
-                    {
-                        success = false,
-                        statuscode = "400",
-                        message = "One or more subjects not found"
-                    };
-                }
-
-                // تحديث قائمة المواد المرتبطة بالطالب
-                student.Subjects.Clear(); // إزالة المواد القديمة
-                foreach (var subject in subjects)
-                {
-                    student.Subjects.Add(subject);
-                }
-
-                // حفظ التغييرات
+                StudentSubject obj = await db.StudentSubjects.Where(n => n.StudentId == Student_Id && n.SubjectId== OldsubjectsId).FirstOrDefaultAsync();
+                db.StudentSubjects.Remove(obj);
+                StudentSubject studentSubject = new StudentSubject();
+                studentSubject.StudentId=Student_Id;
+                studentSubject.SubjectId = newsubject_Id;
+                await db.StudentSubjects.AddAsync(studentSubject);
                 await db.SaveChangesAsync();
+               
+                    return new Response<Student>()
+                    {
+                        success = true,
+                        statuscode = "200",
+                        message = "Subjects updated successfully.",
 
-                return new Response<Student>()
-                {
-                    success = true,
-                    statuscode = "200",
-                    message = "Subjects updated successfully.",
-                    
-                };
+                    };
+               
+                
             }
             catch (Exception ex)
             {

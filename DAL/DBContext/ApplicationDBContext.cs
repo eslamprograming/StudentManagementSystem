@@ -16,6 +16,25 @@ namespace DAL.DBContext
 
         }
         public DbSet<Student> Students { get; set; }
-        public DbSet<Subject> Subjects { get; set; }    
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<StudentSubject> StudentSubjects { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Configure Many-to-Many Relationship
+            modelBuilder.Entity<StudentSubject>()
+                .HasKey(ss => new { ss.StudentId, ss.SubjectId });
+
+            modelBuilder.Entity<StudentSubject>()
+                .HasOne(ss => ss.students)
+                .WithMany(s => s.StudentSubjects)
+                .HasForeignKey(ss => ss.StudentId);
+
+            modelBuilder.Entity<StudentSubject>()
+                .HasOne(ss => ss.subjects)
+                .WithMany(s => s.StudentSubjects)
+                .HasForeignKey(ss => ss.SubjectId);
+        }
     }
 }

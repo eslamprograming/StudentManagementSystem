@@ -32,6 +32,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ISupjectService, SubjectService>();
 builder.Services.AddScoped<IStudentSujectService, StudentSubjectService>();
+builder.Services.AddScoped<IStudentSubjectGradeService, StudentSubjectGradeService>();
 
 
 
@@ -39,6 +40,7 @@ builder.Services.AddScoped<IStudentSujectService, StudentSubjectService>();
 builder.Services.AddScoped<IStudentRepo, StudentRepo>();
 builder.Services.AddScoped<ISubjectRepo, SupjectRepo>();
 builder.Services.AddScoped<IStudentSubjectRepo, StudentSubjectRepo>();
+builder.Services.AddScoped<IStudentSubjectGrades, StudentSubjectGradeRepo>();
 
 
 builder.Services.AddCors(options =>

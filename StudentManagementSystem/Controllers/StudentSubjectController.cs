@@ -34,9 +34,9 @@ namespace StudentManagementSystem.Controllers
             return Ok(result);
         }
         [HttpPut("UpdateSubjectToStudent")]
-        public async Task<IActionResult> UpdateSubjectToStudent(int StudentId, [FromForm]List<int> subjects)
+        public async Task<IActionResult> UpdateSubjectToStudent(int Student_Id, int OldsubjectsId, int newsubject_Id)
         {
-            var result = await _studentSujectService.UpdateSujectsToStudentAsync(StudentId, subjects);
+            var result = await _studentSujectService.UpdateSujectsToStudentAsync(Student_Id, OldsubjectsId,newsubject_Id);
             return Ok(result);
         }
     }

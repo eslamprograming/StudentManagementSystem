@@ -9,7 +9,6 @@ namespace DAL.Entities
 {
     public class Subject
     {
-        [Key]
         public int SubjectId { get; set; }
 
         [Required]
@@ -19,6 +18,6 @@ namespace DAL.Entities
         [MaxLength(500)]
         public string Description { get; set; }
 
-        public ICollection<Student>? Students { get; set; }
+        public ICollection<StudentSubject> StudentSubjects { get; set; } = new List<StudentSubject>();
     }
 }

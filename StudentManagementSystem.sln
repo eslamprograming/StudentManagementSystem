@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentManagementSystem", "StudentManagementSystem\StudentManagementSystem.csproj", "{C73A0717-B560-4456-B6D6-DB33D80B866A}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{8569B4E7-E7BD-4CD0-8942-3CAE81923E4B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{807161DD-8469-4EE3-AA26-7CF24B0A6D72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OOP", "..\OOP\OOP.csproj", "{C993BBCC-3022-4575-8DA5-BB44F02A389B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,10 @@ Global
 		{807161DD-8469-4EE3-AA26-7CF24B0A6D72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{807161DD-8469-4EE3-AA26-7CF24B0A6D72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{807161DD-8469-4EE3-AA26-7CF24B0A6D72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C993BBCC-3022-4575-8DA5-BB44F02A389B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C993BBCC-3022-4575-8DA5-BB44F02A389B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C993BBCC-3022-4575-8DA5-BB44F02A389B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C993BBCC-3022-4575-8DA5-BB44F02A389B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
