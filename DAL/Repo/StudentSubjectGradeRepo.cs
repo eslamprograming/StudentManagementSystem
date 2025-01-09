@@ -75,13 +75,15 @@ namespace DAL.Repo
             try
             {
                 var subjects = await db.StudentSubjects
-                                    .Where(ss => ss.StudentId == Student_Id)
-                               .ToListAsync();
+                    .Where(ss => ss.StudentId == Student_Id)
+                    .Include(n => n.subjects) // تأكد أن Subjects هي خاصية علاقة
+                    .ToListAsync(); // استرجاع جميع المواد الخاصة بالطالب
+
                 return new Response<StudentSubject>()
                 {
-                    statuscode="200",
-                    success=true,
-                    values= subjects
+                    statuscode = "200",
+                    success = true,
+                    values = subjects
                 };
             }
             catch (Exception ex)

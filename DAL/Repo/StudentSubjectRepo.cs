@@ -20,35 +20,24 @@ namespace DAL.Repo
             this.db = db;
         }
 
-        public async Task<Response<Student>> AddSujectsToStudentAsync(int Student_Id, List<int> subjectsId)
+        public async Task<Response<Student>> AddSujectsToStudentAsync(int Student_Id, int subjectsId)
         {
             using var transaction = await db.Database.BeginTransactionAsync();
             try
             {
-                var student = await db.Students.Include(s => s.StudentSubjects).
-                    ThenInclude(n=>n.subjects).FirstOrDefaultAsync(s => s.StudentId == Student_Id);
-                if (student == null)
-                {
+                var stsub = await db.StudentSubjects.Where(n => n.StudentId == Student_Id && n.SubjectId == subjectsId).FirstOrDefaultAsync();
+                if (stsub != null) {
                     return new Response<Student>()
                     {
                         success = false,
                         statuscode = "400",
-                        message = "Student not exist"
+                        message = "studend enrolled this subject"
                     };
                 }
-
-                var subjects = await db.Subjects.Where(s => subjectsId.Contains(s.SubjectId)).ToListAsync();
-                foreach (var subject in subjects)
-                {
-                    if (!student.StudentSubjects.Select(n=>n.subjects).Contains(subject)) // Avoid duplicate additions
-                    {
-                        StudentSubject studentSubject = new StudentSubject();
-                        studentSubject.subjects = subject;
-                        studentSubject.StudentId=student.StudentId;
-                        db.StudentSubjects.AddAsync(studentSubject);
-                    }
-                }
-
+                StudentSubject studentSubject = new StudentSubject();
+                studentSubject.StudentId = Student_Id;
+                studentSubject.SubjectId = subjectsId;
+                await db.StudentSubjects.AddAsync(studentSubject);
                 await db.SaveChangesAsync();
                 await transaction.CommitAsync();
 
@@ -109,7 +98,7 @@ namespace DAL.Repo
             }
         }
 
-        public async Task<Response<List<Subject>>> GetAllSubjectsForStudentAsync(int studentId)
+        public async Task<Response<Subject>> GetAllSubjectsForStudentAsync(int studentId)
         {
             try
             {
@@ -120,7 +109,7 @@ namespace DAL.Repo
 
                 if (!subjects.Any())
                 {
-                    return new Response<List<Subject>>()
+                    return new Response<Subject>()
                     {
                         success = false,
                         statuscode = "404",
@@ -128,16 +117,16 @@ namespace DAL.Repo
                     };
                 }
 
-                return new Response<List<Subject>>()
+                return new Response<Subject>()
                 {
                     success = true,
                     statuscode = "200",
-                    Value = subjects
+                    values = subjects
                 };
             }
             catch (Exception ex)
             {
-                return new Response<List<Subject>>()
+                return new Response<Subject>()
                 {
                     success = false,
                     statuscode = "500",

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace DAL.Entities
@@ -17,7 +18,7 @@ namespace DAL.Entities
 
         [MaxLength(500)]
         public string Description { get; set; }
-
+        [JsonIgnore]
         public ICollection<StudentSubject> StudentSubjects { get; set; } = new List<StudentSubject>();
     }
 }

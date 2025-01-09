@@ -121,8 +121,8 @@ namespace DAL.Repo
                     }
 
                     var Subjects = await db.Subjects
-                        .Skip((groupNumber - 1) * 10)
-                        .Take(10)
+                        //.Skip((groupNumber - 1) * 10)
+                        //.Take(10)
                         .ToListAsync();
 
                     return new Response<Subject>()

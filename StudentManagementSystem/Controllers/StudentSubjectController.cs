@@ -16,15 +16,15 @@ namespace StudentManagementSystem.Controllers
             _studentSujectService = studentSujectService;
         }
         [HttpPost("AddSubjectToStudent")]
-        public async Task<IActionResult> AddSubjectToStudent(int StudentId, [FromForm] List<int> subjects)
+        public async Task<IActionResult> AddSubjectToStudent(int StudentId, int subject_Id)
         {
-            var result = await _studentSujectService.AddSujectsToStudentAsync(StudentId, subjects);
+            var result = await _studentSujectService.AddSujectsToStudentAsync(StudentId, subject_Id);
             return Ok(result);
         }
         [HttpDelete("DeleteSubjectFromStudent")]
-        public async Task<IActionResult> DeleteSubjectFromStudent(int StudentId,int subject)
+        public async Task<IActionResult> DeleteSubjectFromStudent(int StudentId,int subject_Id)
         {
-            var result = await _studentSujectService.DeleteSujectsToStudentAsync(StudentId, subject);
+            var result = await _studentSujectService.DeleteSujectsToStudentAsync(StudentId, subject_Id);
             return Ok(result);
         }
         [HttpGet("GetSubjectFromStudent")]
