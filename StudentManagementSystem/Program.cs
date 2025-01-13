@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using BLL;
+using DAL;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -28,19 +31,21 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 //service
 
 
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IStudentService, StudentService>();
-builder.Services.AddScoped<ISupjectService, SubjectService>();
-builder.Services.AddScoped<IStudentSujectService, StudentSubjectService>();
-builder.Services.AddScoped<IStudentSubjectGradeService, StudentSubjectGradeService>();
+//builder.Services.AddScoped<IAuthService, AuthService>();
+//builder.Services.AddScoped<IStudentService, StudentService>();
+//builder.Services.AddScoped<ISupjectService, SubjectService>();
+//builder.Services.AddScoped<IStudentSujectService, StudentSubjectService>();
+//builder.Services.AddScoped<IStudentSubjectGradeService, StudentSubjectGradeService>();
+builder.Services.service1();
 
 
 
 //Repo
-builder.Services.AddScoped<IStudentRepo, StudentRepo>();
-builder.Services.AddScoped<ISubjectRepo, SupjectRepo>();
-builder.Services.AddScoped<IStudentSubjectRepo, StudentSubjectRepo>();
-builder.Services.AddScoped<IStudentSubjectGrades, StudentSubjectGradeRepo>();
+//builder.Services.AddScoped<IStudentRepo, StudentRepo>();
+//builder.Services.AddScoped<ISubjectRepo, SupjectRepo>();
+//builder.Services.AddScoped<IStudentSubjectRepo, StudentSubjectRepo>();
+//builder.Services.AddScoped<IStudentSubjectGrades, StudentSubjectGradeRepo>();
+builder.Services.service2();
 
 
 builder.Services.AddCors(options =>
